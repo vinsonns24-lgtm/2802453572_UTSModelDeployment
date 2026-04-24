@@ -1,14 +1,5 @@
-"""
-app.py  -  Monolithic Deployment (Soal 3 - Model Deployment UTS 2026)
-======================================================================
-Streamlit app yang memuat model .pkl langsung (tanpa API terpisah).
 
-Cara menjalankan:
-    streamlit run app.py
 
-Pastikan classification_model.pkl dan regression_model.pkl
-berada di folder yang sama.
-"""
 
 import os
 import pickle
@@ -16,7 +7,6 @@ import pickle
 import pandas as pd
 import streamlit as st
 
-# ─── Konfigurasi Halaman ──────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Student Placement Predictor",
     page_icon="🎓",
@@ -29,8 +19,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # ─── Load Model ───────────────────────────────────────────────────────────────
 @st.cache_resource
 def load_models():
-    clf_path = os.path.join(BASE_DIR, "artifacts", "classification_model.pkl")
-    reg_path = os.path.join(BASE_DIR, "artifacts", "regression_model.pkl")
+    clf_path = os.path.join(BASE_DIR, "classification_model.pkl")
+    reg_path = os.path.join(BASE_DIR, "regression_model.pkl")
     with open(clf_path, "rb") as f:
         clf_model = pickle.load(f)
     with open(reg_path, "rb") as f:
@@ -40,7 +30,6 @@ def load_models():
 
 clf_model, reg_model = load_models()
 
-# ─── Header ───────────────────────────────────────────────────────────────────
 st.title("🎓 Student Placement & Salary Predictor")
 st.markdown(
     "Aplikasi ini memprediksi **status penempatan kerja** dan "
@@ -48,7 +37,6 @@ st.markdown(
 )
 st.divider()
 
-# ─── Sidebar Info ─────────────────────────────────────────────────────────────
 with st.sidebar:
     st.header("ℹ️ Tentang Aplikasi")
     st.info(
@@ -59,7 +47,6 @@ with st.sidebar:
     )
     st.markdown("---")
 
-# ─── Form Input ───────────────────────────────────────────────────────────────
 with st.form("prediction_form"):
     st.subheader("📋 Masukkan Data Mahasiswa")
 
@@ -91,7 +78,6 @@ with st.form("prediction_form"):
 
     submitted = st.form_submit_button("🔍 Prediksi Sekarang", use_container_width=True)
 
-# ─── Prediksi ─────────────────────────────────────────────────────────────────
 if submitted:
     input_data = pd.DataFrame([{
         "gender":                    gender,
